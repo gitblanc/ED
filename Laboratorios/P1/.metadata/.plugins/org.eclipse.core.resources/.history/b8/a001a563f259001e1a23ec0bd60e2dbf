@@ -43,14 +43,13 @@ public class Algoritmos {
 	}
 
 	public void logarithmic(int n) {
-		while(n > 0) {
+		for (int i = n; i >= 0; i /= 2) {
 			doNothing();
-			n = n/2;
 		}
 	}
 
 	// Dormimos el hilo de ejecución en el método 250 ms
-	private static int doNothing() {
+	private int doNothing() {
 		try {
 			Thread.sleep(SLEEP_TIME);
 			return 0;
@@ -65,69 +64,24 @@ public class Algoritmos {
 
 	// Resto de algoritmos (iterativos y recursivos)
 
-//	public static int recursivePow(int base, int exponente) {
-//		if (exponente < 0)
-//			throw new IllegalArgumentException("Parámetro no aceptado");
-//
-//		if (exponente == 0)
-//			return 1;
-//
-//		return recursivePow(base, exponente - 1) * base;
-//	}
-
-	public static int recursivePow(int exponente) {
+	public static int recursivePow(int base, int exponente) {
 		if (exponente < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
 
 		if (exponente == 0)
 			return 1;
 
-		doNothing();
-
-		return recursivePow(exponente - 1) * 2;
+		return recursivePow(base, exponente - 1) * base;
 	}
-
-	public static int recursivePow1(int exponente) {
+	
+	public static int recursivePow1(int base, int exponente) {
 		if (exponente < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
 
 		if (exponente == 0)
 			return 1;
 
-		doNothing();
-
-		return (recursivePow1(exponente - 1) + recursivePow1(exponente - 1));
-	}
-
-	public static int recursivePow2(int exponente) {
-		if (exponente < 0)
-			throw new IllegalArgumentException("Parámetro no aceptado");
-
-		if (exponente == 0)
-			return 1;
-
-		doNothing();
-
-		if (exponente % 2 == 0)
-			return (recursivePow2(exponente / 2) * recursivePow2(exponente / 2));
-		else
-			return (recursivePow2(exponente / 2) * recursivePow2(exponente / 2) * 2);
-	}
-
-	public static long recursivePow3(int exponente) {
-		if (exponente < 0)
-			throw new IllegalArgumentException("Parámetro no aceptado");
-
-		if (exponente == 0)
-			return 1;
-
-		doNothing();
-
-		long result = recursivePow3(exponente / 2);
-		if (exponente % 2 == 0)
-			return (result * result);
-		else
-			return (result * result * 2);
+		return recursivePow(base, exponente - 1) + recursivePow(base, exponente - 1);
 	}
 
 	public static int iterativePow(int base, int exponente) {

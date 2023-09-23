@@ -7,7 +7,7 @@ class AlgoritmosTests {
 	@Test
 	void testRecursivePow1() {
 		try {
-			assertEquals(1, Algoritmos.recursivePow(5, 0));
+			assertEquals(1, Algoritmos.recursivePow(0));
 		} catch (AssertionError e) {
 			System.out.println("El resultado debería ser 1");
 			throw e;
@@ -17,10 +17,122 @@ class AlgoritmosTests {
 	@Test
 	void testRecursivePow2() {
 		try {
-			assertEquals(125, Algoritmos.recursivePow(5, 3));
+			assertEquals(8, Algoritmos.recursivePow(3));
 		} catch (AssertionError e) {
-			System.out.println("El resultado debería ser 125");
+			System.out.println("El resultado debería ser 8");
 			throw e;
+		}
+	}
+
+	@Test
+	void testRecursivePow3() throws IllegalArgumentException {
+		try {
+			Algoritmos.recursivePow(-3);
+
+			// Si no se lanza la excepción, el test fallará
+			fail("Se esperaba una excepción IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			// Verificar que la excepción tenga el mensaje correcto
+			assertEquals("Parámetro no aceptado", e.getMessage());
+		}
+	}
+
+	@Test
+	void testRecursivePow1_1() {
+		try {
+			assertEquals(1, Algoritmos.recursivePow1(0));
+		} catch (AssertionError e) {
+			System.out.println("El resultado debería ser 1");
+			throw e;
+		}
+	}
+
+	@Test
+	void testRecursivePow1_2() {
+		try {
+			assertEquals(8, Algoritmos.recursivePow1(3));
+		} catch (AssertionError e) {
+			System.out.println("El resultado debería ser 8");
+			throw e;
+		}
+	}
+	
+	@Test
+	void testRecursivePow1_3() throws IllegalArgumentException {
+		try {
+			Algoritmos.recursivePow1(-3);
+
+			// Si no se lanza la excepción, el test fallará
+			fail("Se esperaba una excepción IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			// Verificar que la excepción tenga el mensaje correcto
+			assertEquals("Parámetro no aceptado", e.getMessage());
+		}
+	}
+
+	@Test
+	void testRecursivePow2_1() {
+		try {
+			assertEquals(1, Algoritmos.recursivePow2(0));
+		} catch (AssertionError e) {
+			System.out.println("El resultado debería ser 1");
+			throw e;
+		}
+	}
+
+	@Test
+	void testRecursivePow2_2() {
+		try {
+			assertEquals(8, Algoritmos.recursivePow2(3));
+		} catch (AssertionError e) {
+			System.out.println("El resultado debería ser 8");
+			throw e;
+		}
+	}
+	
+	@Test
+	void testRecursivePow2_3() throws IllegalArgumentException {
+		try {
+			Algoritmos.recursivePow2(-3);
+
+			// Si no se lanza la excepción, el test fallará
+			fail("Se esperaba una excepción IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			// Verificar que la excepción tenga el mensaje correcto
+			assertEquals("Parámetro no aceptado", e.getMessage());
+		}
+	}
+
+	@Test
+	void testRecursivePow3_1() {
+		try {
+			assertEquals(1, Algoritmos.recursivePow3(0));
+		} catch (AssertionError e) {
+			System.out.println("El resultado debería ser 1");
+			throw e;
+		}
+	}
+
+	@Test
+	void testRecursivePow3_2() {
+		try {
+			assertEquals(8, Algoritmos.recursivePow3(3));
+		} catch (AssertionError e) {
+			System.out.println("El resultado debería ser 8");
+			throw e;
+		}
+	}
+	
+	@Test
+	void testRecursivePow3_3() throws IllegalArgumentException {
+		try {
+			Algoritmos.recursivePow3(-3);
+
+			// Si no se lanza la excepción, el test fallará
+			fail("Se esperaba una excepción IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			// Verificar que la excepción tenga el mensaje correcto
+			assertEquals("Parámetro no aceptado", e.getMessage());
 		}
 	}
 
@@ -83,7 +195,7 @@ class AlgoritmosTests {
 			throw e;
 		}
 	}
-	
+
 	@Test
 	void testRecursiveFibo1() {
 		try {
@@ -103,7 +215,7 @@ class AlgoritmosTests {
 			throw e;
 		}
 	}
-	
+
 	@Test
 	void testRecursiveFibo3() {
 		try {
@@ -113,7 +225,7 @@ class AlgoritmosTests {
 			throw e;
 		}
 	}
-	
+
 	@Test
 	void testIterativeFibo1() {
 		try {
@@ -133,7 +245,7 @@ class AlgoritmosTests {
 			throw e;
 		}
 	}
-	
+
 	@Test
 	void testIterativeFibo3() {
 		try {

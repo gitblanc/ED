@@ -50,6 +50,7 @@ public class TestBench {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			System.out.println("El fichero " + output + " ya se escribió!");
 			if (file != null)
 				file.close();
 		}
