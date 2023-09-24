@@ -13,8 +13,7 @@ public class Algoritmos {
 	// Algoritmos de medición de tiempos
 
 	/**
-	 * Para medir algoritmos de orden n (lineal), siendo la n pasada la carga de
-	 * trabajo
+	 * Algoritmo de orden n (lineal), siendo la n pasada la carga de trabajo
 	 * 
 	 * @param n
 	 */
@@ -24,6 +23,11 @@ public class Algoritmos {
 		}
 	}
 
+	/**
+	 * Algoritmo de orden n^2 (cuadrática)
+	 * 
+	 * @param n
+	 */
 	public void quadratic(int n) {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
@@ -32,6 +36,11 @@ public class Algoritmos {
 		}
 	}
 
+	/**
+	 * Algoritmo de orden n^3 (cúbica)
+	 * 
+	 * @param n
+	 */
 	public void cubic(int n) {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
@@ -42,14 +51,23 @@ public class Algoritmos {
 		}
 	}
 
+	/**
+	 * Algoritmo de orden log n (logarítmica)
+	 * 
+	 * @param n
+	 */
 	public void logarithmic(int n) {
-		while(n > 0) {
+		while (n > 0) {
 			doNothing();
-			n = n/2;
+			n = n / 2;
 		}
 	}
 
-	// Dormimos el hilo de ejecución en el método 250 ms
+	/**
+	 * Método en el que dormimos el hilo de ejecución en el método 250 ms
+	 * 
+	 * @return 0 si todo está bien o -1 si algo falló
+	 */
 	private static int doNothing() {
 		try {
 			Thread.sleep(SLEEP_TIME);
@@ -65,16 +83,9 @@ public class Algoritmos {
 
 	// Resto de algoritmos (iterativos y recursivos)
 
-//	public static int recursivePow(int base, int exponente) {
-//		if (exponente < 0)
-//			throw new IllegalArgumentException("Parámetro no aceptado");
-//
-//		if (exponente == 0)
-//			return 1;
-//
-//		return recursivePow(base, exponente - 1) * base;
-//	}
-
+	/**
+	 * Método 0 para calcular la potencia de dos de forma recursiva
+	 */
 	public static int recursivePow(int exponente) {
 		if (exponente < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
@@ -87,6 +98,9 @@ public class Algoritmos {
 		return recursivePow(exponente - 1) * 2;
 	}
 
+	/**
+	 * Método 1 para calcular la potencia de dos de forma recursiva
+	 */
 	public static int recursivePow1(int exponente) {
 		if (exponente < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
@@ -99,6 +113,9 @@ public class Algoritmos {
 		return (recursivePow1(exponente - 1) + recursivePow1(exponente - 1));
 	}
 
+	/**
+	 * Método 2 para calcular la potencia de dos de forma recursiva
+	 */
 	public static int recursivePow2(int exponente) {
 		if (exponente < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
@@ -114,6 +131,9 @@ public class Algoritmos {
 			return (recursivePow2(exponente / 2) * recursivePow2(exponente / 2) * 2);
 	}
 
+	/**
+	 * Método 3 para calcular la potencia de dos de forma recursiva
+	 */
 	public static long recursivePow3(int exponente) {
 		if (exponente < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
@@ -130,8 +150,30 @@ public class Algoritmos {
 			return (result * result * 2);
 	}
 
+	/**
+	 * Método para calcular la potencia de una base y un exponente dado de forma
+	 * recursiva
+	 * 
+	 * @param base
+	 * @param exponente
+	 * @return
+	 */
+	public static int recursivePow(int base, int exponente) {
+		if (exponente < 0 || base < 0)
+			throw new IllegalArgumentException("Parámetro no aceptado");
+
+		if (exponente == 0)
+			return 1;
+
+		return recursivePow(base, exponente - 1) * base;
+	}
+
+	/**
+	 * Método para calcular la potencia de una base y un exponente dados de forma
+	 * iterativa
+	 */
 	public static int iterativePow(int base, int exponente) {
-		if (exponente < 0)
+		if (exponente < 0 || base < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
 
 		int res = 1;
@@ -142,6 +184,9 @@ public class Algoritmos {
 		return res;
 	}
 
+	/**
+	 * Método para calcular el fatorial de un número de forma recursiva
+	 */
 	public static int recursiveFactorial(int number) {
 		if (number < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
@@ -151,6 +196,9 @@ public class Algoritmos {
 		return recursiveFactorial(number - 1) * number;
 	}
 
+	/**
+	 * Método para calcular el fatorial de un número de forma iterativa
+	 */
 	public static int iterativeFactorial(int number) {
 		if (number < 0)
 			throw new IllegalArgumentException("Parámetro no aceptado");
@@ -164,7 +212,10 @@ public class Algoritmos {
 		return res;
 	}
 
-	// CUIDADO: Pasas el termino, no el numero (termino 2, no número 2)
+	/**
+	 * Método para calcular fibonacci de un término de forma recursiva
+	 */
+	// CUIDADO: Se pasa el termino, no el numero (termino 2, no número 2)
 	public static int recursiveFibonacci(int termino) {
 		if (termino < 1)
 			throw new IllegalArgumentException("Parámetro no aceptado");
@@ -178,8 +229,13 @@ public class Algoritmos {
 		return recursiveFibonacci(termino - 1) + recursiveFibonacci(termino - 2);
 	}
 
+	/**
+	 * Método para calcular fibonacci de un término de forma iterativa
+	 */
 	public static int iterativeFibonacci(int termino) {
-
+		if (termino < 1)
+			throw new IllegalArgumentException("Parámetro no aceptado");
+		
 		int primero = 0;
 		int segundo = 1;
 
