@@ -11,7 +11,7 @@ import soporte.FullStructureException;
 /**
  * Clase Grafo Genérica
  * 
- * @author blanc
+ * @author Eduardo Blanco Bielsa - UO285176
  *
  * @param <T>
  */
@@ -222,14 +222,120 @@ public class Grafos<T> {
 
 	}
 
+	/**
+	 * Método que devuelve la matriz de pesos
+	 * 
+	 * @return weights
+	 */
 	public double[][] getWeights() {
-		return weights;
+		return this.weights;
 	}
 
+	/**
+	 * Método que devuelve la matriz de aristas
+	 * 
+	 * @return edges
+	 */
 	public boolean[][] getEdges() {
-		return edges;
+		return this.edges;
 	}
 
+	/**
+	 * Método que resuelve el algoritmo de Dijkstra
+	 * 
+	 * @param i
+	 * @return dijkstra
+	 */
+	public DijkstraDataClass dijkstra(T source) {
+		if (source == null || !existsNode(source))
+			return null; // no aplica
+
+		boolean[] s = new boolean[size]; // nodods visitados
+		DijkstraDataClass dijkstra = new DijkstraDataClass(size, 1);
+
+		dijkstra.setpDijkstra(initializeP()); // inicializamos la matriz de caminos
+		dijkstra.setdDijkstra(initializeD(source)); // inicializamos la matriz de costes
+
+		double[] D = dijkstra.getdDijkstra();
+		int[] P = dijkstra.getpDijkstra();
+
+		// obtenemos el pivote para la siguiente iteración de dijkstra
+		int w = getPivote(dijkstra.getdDijkstra(), s);
+
+		while (w != -1) { // mientras que aún queden nodos por visitar
+			s[w] = true;
+			for (int m = 0; m < size; m++) {
+				// Si no está visitado y existe una arista
+				if (!s[m] && existsEdge(nodes[w], nodes[m])) {
+					if ((D[w] + weights[w][m]) < D[m]) {
+						D[m] = D[w] + weights[w][m];
+						P[m] = w;
+					}
+				}
+			}
+			w = getPivote(D, s);
+		}
+
+		return dijkstra;
+
+	}
+
+	/**
+	 * Método que devuelve la posición del nodo pivote (el nodo con menor coste que
+	 * no haya sido visitado)
+	 * 
+	 * @param d
+	 * @param s
+	 * @return pos o -1
+	 */
+	public int getPivote(double[] d, boolean[] s) {
+		double costeMinimo = Double.POSITIVE_INFINITY;
+		int pos = -1;
+		for (int i = 0; i < d.length; i++) {
+			if (d[i] < costeMinimo && !s[i]) {
+				costeMinimo = d[i];
+				pos = i;
+			}
+		}
+		return pos;
+	}
+
+	/**
+	 * Inicializa la matriz de caminos (todos a -1)
+	 * 
+	 * @param dijkstra
+	 */
+	public int[] initializeP() {
+		int[] p = new int[size];
+		for (int i = 0; i < p.length; i++)
+			p[i] = -1;
+
+		return p;
+	}
+
+	/**
+	 * Inicializa los costes de la matriz
+	 * 
+	 * @param dijkstra
+	 * @param source
+	 */
+	public double[] initializeD(T source) {
+		double d[] = new double[size];
+		for (int i = 0; i < d.length; i++) {
+			if (nodes[i].equals(source))
+				d[i] = 0;
+			else if (existsEdge(source, this.nodes[i]))
+				d[i] = getEdge(source, this.nodes[i]);
+			else
+				d[i] = Double.POSITIVE_INFINITY;
+		}
+
+		return d;
+	}
+
+	/**
+	 * ToString proporcionado
+	 */
 	@Override
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("#.##");

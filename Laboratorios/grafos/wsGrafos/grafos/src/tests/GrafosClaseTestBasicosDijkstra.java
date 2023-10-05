@@ -1,24 +1,29 @@
+package tests;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import main.Grafos;
+import soporte.ElementNotPresentException;
+
 class GrafosClaseTestBasicosDijkstra {
 
 	@Test
 	public void testAddNodeException() {
-		// Creamos un vector de nodos con tamaño 2
+		// Creamos un vector de nodos con tamaï¿½o 2
 		Grafos<Integer> graph = new Grafos<Integer>(2);
 		
 	
 		
-		// Caso 1 - Añadimos el nodo al vector
+		// Caso 1 - Aï¿½adimos el nodo al vector
 		Assert.assertTrue (graph.addNode(1)); 
 		Assert.assertEquals(1, graph.getSize());
 		Assert.assertEquals(0, graph.getNode(1));
 		Assert.assertTrue(graph.existsNode(1));
 		
-		// Caso 2 - Añadimos null al vector
+		// Caso 2 - Aï¿½adimos null al vector
 		try {
 			graph.addNode(null); 
 			fail();
@@ -40,7 +45,7 @@ class GrafosClaseTestBasicosDijkstra {
 		graph2.addEdge(3, 2, 4);
 		System.out.print("BORRAR NODO\n  Grafo2 completo Inicial-->"+graph2.toString());
 		
-		//Caso 2: Borro el último nodo
+		//Caso 2: Borro el ï¿½ltimo nodo
 		Assert.assertEquals(true, graph2.removeNode(4));
 		
 		System.out.print("Tras BORRAR 4 \n Grafo2 completo Final-->"+graph2.toString());
@@ -96,7 +101,7 @@ class GrafosClaseTestBasicosDijkstra {
 	}
 	@Test
 	public void testGetNode() {
-		// Creamos un vector de nodos con tamaño 2
+		// Creamos un vector de nodos con tamaï¿½o 2
 		Grafos<Integer> graph = new Grafos<Integer>(2);
 		Assert.assertEquals(graph.addNode(1),true);
 		Assert.assertEquals(graph.addNode(2), true);
@@ -112,7 +117,7 @@ class GrafosClaseTestBasicosDijkstra {
 	
 	@Test
 	public void testGetEdge() {
-		// Creamos un vector de nodos con tamaño 2
+		// Creamos un vector de nodos con tamaï¿½o 2
 		Grafos<Integer> graph = new Grafos<Integer>(2);
 		graph.addNode(1);
 		graph.addNode(2);
@@ -138,7 +143,7 @@ class GrafosClaseTestBasicosDijkstra {
 	
 	@Test
 	public void testExistNode() {
-		// Creamos un vector de nodos con tamaño 2
+		// Creamos un vector de nodos con tamaï¿½o 2
 		Grafos<Integer> graph = new Grafos<Integer>(2);
 		graph.addNode(1);
 		graph.addNode(2);
@@ -178,7 +183,7 @@ class GrafosClaseTestBasicosDijkstra {
 		try { graph.addEdge(4, 3, -6); fail();} 
 		  catch (IllegalArgumentException e) { }
 		
-		System.out.print("AÑADIR ARISTA \n Grafo completo-->"+graph.toString());
+		System.out.print("Aï¿½ADIR ARISTA \n Grafo completo-->"+graph.toString());
 		
 		// Los nodos y el camino existe
 		Assert.assertEquals(1.0, graph.getEdge(1, 2), 0.0);
@@ -196,7 +201,7 @@ class GrafosClaseTestBasicosDijkstra {
 		Assert.assertEquals(2.0, graph.getEdge(4, 3), 0.0);
 		Assert.assertTrue(graph.existsEdge(4,3));
 		
-		//Caso de añadir una arista que ya existe
+		//Caso de aï¿½adir una arista que ya existe
 		Assert.assertFalse(graph.addEdge(4, 3, 2));
 	}
 	

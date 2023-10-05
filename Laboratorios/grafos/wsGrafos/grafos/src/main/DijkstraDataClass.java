@@ -1,13 +1,14 @@
+package main;
 
 /**
  * @author Nestor
  * @version 2022-23
  */
 public class DijkstraDataClass {
-	
+
 	int nodeIndex;
-	double dDijkstra[];// Vector D de Dijkstra
-	int pDijkstra[]; // Vector P de Dijkstra
+	double dDijkstra[];// Vector D de Dijkstra (vector de costes)
+	int pDijkstra[]; // Vector P de Dijkstra (vector de rutas)
 
 	public DijkstraDataClass(int nNodes, int index) {
 		nodeIndex = index;
@@ -20,7 +21,12 @@ public class DijkstraDataClass {
 		setdDijkstra(d);
 		setpDijkstra(p);
 	}
-
+	
+	public void initializeP() {
+		for(int i = 0; i < pDijkstra.length; i++)
+			pDijkstra[i] = -1;
+	}
+	
 	public int getNodeIndex() {
 		return nodeIndex;
 	}
@@ -44,6 +50,5 @@ public class DijkstraDataClass {
 	public void setpDijkstra(int[] pDijkstra) {
 		this.pDijkstra = pDijkstra;
 	}
-	
 
 }
