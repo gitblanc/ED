@@ -1,33 +1,32 @@
 package tests;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import main.Grafos;
 import exceptions.ElementNotPresentException;
+import main.Grafos;
 
-class GrafosClaseTestBasicos {
+class GrafosClaseTest {
 
 	@Test
 	public void testAddNodeException() {
-		// Creamos un vector de nodos con tamaño 2
+		// Creamos un vector de nodos con tama�o 2
 		Grafos<Integer> graph = new Grafos<Integer>(2);
 
-		// Caso 1 - Añadimos el nodo al vector
+		// Caso 1 - A�adimos el nodo al vector
 		Assert.assertTrue(graph.addNode(1));
 		Assert.assertEquals(1, graph.getSize());
 		Assert.assertEquals(0, graph.getNode(1));
 		Assert.assertTrue(graph.existsNode(1));
 
-		// Caso 2 - Añadimos null al vector
+		// Caso 2 - A�adimos null al vector
 		try {
 			graph.addNode(null);
 			fail();
 		} catch (NullPointerException e) {
 		}
-
 	}
 
 	@Test
@@ -44,7 +43,7 @@ class GrafosClaseTestBasicos {
 		graph2.addEdge(3, 2, 4);
 		System.out.print("BORRAR NODO\n  Grafo2 completo Inicial-->" + graph2.toString());
 
-		// Caso 2: Borro el ñltimo nodo
+		// Caso 2: Borro el �ltimo nodo
 		Assert.assertEquals(true, graph2.removeNode(4));
 
 		System.out.print("Tras BORRAR 4 \n Grafo2 completo Final-->" + graph2.toString());
@@ -101,7 +100,7 @@ class GrafosClaseTestBasicos {
 
 	@Test
 	public void testGetNode() {
-		// Creamos un vector de nodos con tamaño 2
+		// Creamos un vector de nodos con tama�o 2
 		Grafos<Integer> graph = new Grafos<Integer>(2);
 		Assert.assertEquals(graph.addNode(1), true);
 		Assert.assertEquals(graph.addNode(2), true);
@@ -116,7 +115,7 @@ class GrafosClaseTestBasicos {
 
 	@Test
 	public void testGetEdge() {
-		// Creamos un vector de nodos con tamaño 2
+		// Creamos un vector de nodos con tama�o 2
 		Grafos<Integer> graph = new Grafos<Integer>(2);
 		graph.addNode(1);
 		graph.addNode(2);
@@ -140,7 +139,7 @@ class GrafosClaseTestBasicos {
 
 	@Test
 	public void testExistNode() {
-		// Creamos un vector de nodos con tamaño 2
+		// Creamos un vector de nodos con tama�o 2
 		Grafos<Integer> graph = new Grafos<Integer>(2);
 		graph.addNode(1);
 		graph.addNode(2);
@@ -169,10 +168,8 @@ class GrafosClaseTestBasicos {
 		graph.addNode(3);
 		graph.addNode(4);
 		graph.addNode(5);
-
-		System.out.println("HOLA");
-		System.out.println(graph.toString());
 		Assert.assertTrue(graph.addEdge(1, 2, 1));
+		;
 		Assert.assertTrue(graph.addEdge(1, 5, 10));
 		Assert.assertTrue(graph.addEdge(1, 4, 3));
 		Assert.assertTrue(graph.addEdge(2, 3, 5));
@@ -187,7 +184,7 @@ class GrafosClaseTestBasicos {
 		} catch (IllegalArgumentException e) {
 		}
 
-		System.out.print("AñADIR ARISTA \n Grafo completo-->" + graph.toString());
+		System.out.print("A�ADIR ARISTA \n Grafo completo-->" + graph.toString());
 
 		// Los nodos y el camino existe
 		Assert.assertEquals(1.0, graph.getEdge(1, 2), 0.0);
@@ -205,7 +202,7 @@ class GrafosClaseTestBasicos {
 		Assert.assertEquals(2.0, graph.getEdge(4, 3), 0.0);
 		Assert.assertTrue(graph.existsEdge(4, 3));
 
-		// Caso de añadir una arista que ya existe
+		// Caso de a�adir una arista que ya existe
 		Assert.assertFalse(graph.addEdge(4, 3, 2));
 	}
 
@@ -235,6 +232,172 @@ class GrafosClaseTestBasicos {
 			fail();
 		} catch (ElementNotPresentException e) {
 		}
+	}
+
+	@Test
+	public void testDijkstraclass2() {
+		Grafos<Integer> graph = new Grafos<Integer>(6);
+
+		graph.addNode(1);
+		graph.addNode(2);
+		graph.addNode(3);
+		graph.addNode(4);
+		graph.addNode(5);
+
+		graph.addEdge(1, 2, 1);
+		graph.addEdge(1, 5, 10);
+		graph.addEdge(1, 4, 3);
+		graph.addEdge(2, 3, 5);
+		// graph.addEdge(2, 2, 4);
+		graph.addEdge(3, 5, 1);
+		graph.addEdge(4, 3, 2);
+		graph.addEdge(4, 5, 6);
+
+		/*** COMPARO EL VECTOR DE D (COSTES) ***********/
+		Assert.assertArrayEquals(new double[] { 0.0, 1.0, 5.0, 3.0, 6.0 }, graph.dijkstra(1).getdDijkstra(), 0);
+
+		Assert.assertArrayEquals(new double[] { Double.POSITIVE_INFINITY, 0.0, 5.0, Double.POSITIVE_INFINITY, 6.0 },
+				graph.dijkstra(2).getdDijkstra(), 0);
+		Assert.assertArrayEquals(
+				new double[] { Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 0.0, Double.POSITIVE_INFINITY, 1.0 },
+				graph.dijkstra(3).getdDijkstra(), 0);
+		Assert.assertArrayEquals(new double[] { Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 2.0, 0.0, 3.0 },
+				graph.dijkstra(4).getdDijkstra(), 0);
+		Assert.assertArrayEquals(new double[] { Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY,
+				Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 0.0 }, graph.dijkstra(5).getdDijkstra(), 0);
+
+		/*** COMPARO EL VECTOR DE P (CAMINOS) ***********/
+
+		Assert.assertArrayEquals(new int[] { -1, -1, 3, -1, 2 }, graph.dijkstra(1).getpDijkstra());
+	}
+
+	@Test
+	public void testFloyd1() {
+
+		Grafos<Integer> graph = new Grafos<Integer>(6);
+
+		// Este es el grafo de ejemplo de teor�a
+
+		graph.addNode(1);
+		graph.addNode(2);
+		graph.addNode(3);
+		graph.addNode(4);
+		graph.addNode(5);
+		graph.addEdge(1, 2, 1);
+		graph.addEdge(1, 4, 3);
+		graph.addEdge(1, 5, 10);
+		graph.addEdge(2, 3, 5);
+		graph.addEdge(3, 5, 1);
+		graph.addEdge(4, 3, 2);
+		graph.addEdge(4, 5, 6);
+
+		/* El grafo est cargado */
+		Assert.assertEquals(true, graph.floyd());
+
+		double INF = Double.POSITIVE_INFINITY;
+
+		Assert.assertArrayEquals(new double[][] { { 0.0, 1.0, 5.0, 3.0, 6.0 }, { INF, 0.0, 5, INF, 6.0 },
+				{ INF, INF, 0.0, INF, 1.0 }, { INF, INF, 2, 0.0, 3 }, { INF, INF, INF, INF, 0.0 } }, graph.getFloydA());
+
+	}
+
+	@Test
+	public void testFloydPath() {
+		Grafos<Integer> graph = new Grafos<Integer>(5);
+
+		graph.addNode(1);
+		graph.addNode(2);
+		graph.addNode(3);
+		graph.addNode(4);
+		graph.addNode(5);
+		graph.addEdge(1, 2, 1);
+		graph.addEdge(2, 3, 2);
+		graph.addEdge(3, 4, 2);
+		graph.addEdge(3, 5, 4);
+		graph.addEdge(4, 2, 1);
+		graph.addEdge(4, 3, 3);
+		graph.addEdge(5, 4, 5);
+
+		/* El grafo est� cargado */
+		Assert.assertEquals(true, graph.floyd());
+
+		/*
+		 * Caso 0: Existe camino entre los dos pares de nodos y van por la rama de
+		 * origen-k
+		 */
+
+		String cadena = "5	(5.0)	4	(3.0)	3";
+		Assert.assertEquals(cadena, graph.path(5, 3));
+
+		String cadena1 = "1	(1.0)	2	(2.0)	3	(2.0)	4";
+		Assert.assertEquals(cadena1, graph.path(1, 4));
+
+		/* Caso 1: Nodos origen y destino son los mismos */
+		Assert.assertEquals("5" + "\t", graph.path(5, 5));
+
+		/* Caso 2: No existe camino directo */
+		Assert.assertEquals("2" + "\t" + "(Infinity)" + "\t" + "1", graph.path(2, 1));
+
+	}
+
+	@Test
+	public void testMinCost() {
+		Grafos<Integer> graph = new Grafos<Integer>(5);
+
+		graph.addNode(1);
+		graph.addNode(2);
+		graph.addNode(3);
+		graph.addNode(4);
+		graph.addNode(5);
+		graph.addEdge(1, 2, 1);
+		graph.addEdge(2, 3, 2);
+		graph.addEdge(3, 4, 2);
+		graph.addEdge(3, 5, 4);
+		graph.addEdge(4, 2, 1);
+		graph.addEdge(4, 3, 3);
+		graph.addEdge(5, 4, 5);
+		/* El grafo est� cargado */
+		Assert.assertEquals(true, graph.floyd());
+
+		/* Existe coste m�nimo */
+		Assert.assertEquals(5.0, graph.minCostPath(1, 4), 0);
+
+		/* No Existe los nodos */
+
+		try {
+			graph.minCostPath(8, 7);
+			fail();
+		} catch (ElementNotPresentException e) {
+		}
+
+	}
+
+	@Test
+	public void recorridoProfundidad() {
+		Grafos<Integer> graph = new Grafos<Integer>(5);
+
+		graph.addNode(1);
+		graph.addNode(2);
+		graph.addNode(3);
+		graph.addNode(4);
+		graph.addNode(5);
+		graph.addEdge(1, 2, 1);
+		graph.addEdge(1, 5, 10);
+		graph.addEdge(1, 4, 2);
+		graph.addEdge(2, 2, 4);
+		graph.addEdge(2, 3, 5);
+		graph.addEdge(3, 5, 1);
+		graph.addEdge(4, 3, 2);
+
+		Assert.assertEquals("1" + "\t" + "2" + "\t" + "3" + "\t" + "5" + "\t" + "4" + "\t",
+				graph.recorridoProfundidad(1));
+
+		/* No existe el nodo-->No imprime nada */
+		Assert.assertEquals("", graph.recorridoProfundidad(7));
+
+		/* Recorrido profundidad del 5 */
+
+		Assert.assertEquals("5	", graph.recorridoProfundidad(5));
 	}
 
 }

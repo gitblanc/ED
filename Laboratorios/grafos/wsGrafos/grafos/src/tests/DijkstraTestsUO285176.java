@@ -39,7 +39,7 @@ class DijkstraTestsUO285176 {
 		graph.addNode(2);
 		graph.addNode(3);
 		graph.addNode(4);
-		graph.addNode(5);// vamos a crear el grafo de seminario
+		graph.addNode(5);
 		graph.addEdge(1, 2, 10);
 		graph.addEdge(1, 4, 30);
 		graph.addEdge(1, 5, 100);

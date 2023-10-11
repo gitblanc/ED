@@ -5,8 +5,8 @@ package main;
 
 import java.text.DecimalFormat;
 
-import soporte.ElementNotPresentException;
-import soporte.FullStructureException;
+import exceptions.ElementNotPresentException;
+import exceptions.FullStructureException;
 
 /**
  * Clase Grafo Genérica
@@ -20,6 +20,11 @@ public class Grafos<T> {
 	private boolean[][] edges;// Matriz de aristas
 	private T[] nodes;// Nodos: Lista de nodos
 	private int size; // Tamaño del grafo
+
+	// Para floyd
+	private double[][] A; // matriz de costes
+	private int[][] P; // matriz de rutas
+	private String cadena;// cadena para el path
 
 	/**
 	 * Constructor que declara las matrices de aristas, pesos y el vector de nodos
@@ -306,7 +311,7 @@ public class Grafos<T> {
 	 * @param dijkstra
 	 */
 	public int[] initializeP() {
-		int[] p = new int[size];
+		int[] p = new int[getSize()];
 		for (int i = 0; i < p.length; i++)
 			p[i] = -1;
 
@@ -331,6 +336,184 @@ public class Grafos<T> {
 		}
 
 		return d;
+	}
+
+	/**
+	 * Método que implementa el algoritmo de floyd
+	 * 
+	 * @return true/false
+	 */
+	public boolean floyd() {
+		// Si no hay nodos
+		if (getSize() == 0)
+			return false;
+
+		// Inicializamos la matriz de costes A y la de rutas P
+		initializePFloyd();
+		initializeAFloyd();
+
+		for (int pivote = 0; pivote < getSize(); pivote++) {
+			for (int source = 0; source < getSize(); source++) {
+				for (int target = 0; target < getSize(); target++) {
+					// Si el cose de usar un nodo intermedio es menor que ir directamente
+					if (getFloydA()[source][pivote] + getFloydA()[pivote][target] < getFloydA()[source][target]) {
+						this.A[source][target] = getFloydA()[source][pivote] + getFloydA()[pivote][target];
+						this.P[source][target] = pivote;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Método que inicializa la matriz P de floyd
+	 */
+	private void initializeAFloyd() {
+		this.A = new double[getSize()][getSize()];
+
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (i == j)
+					this.A[i][j] = 0;
+				else if (existsEdge(this.nodes[i], this.nodes[j]))
+					this.A[i][j] = this.weights[i][j];
+				else
+					this.A[i][j] = Double.POSITIVE_INFINITY;
+			}
+		}
+	}
+
+	/**
+	 * Método que inicializa la matriz A de floyd
+	 */
+	private void initializePFloyd() {
+		this.P = new int[getSize()][getSize()];
+
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				this.P[i][j] = -1;
+			}
+		}
+	}
+
+	/**
+	 * Devuelve la matriz A de Floyd
+	 * 
+	 * @return A
+	 */
+	public double[][] getFloydA() {
+		return this.A;
+	}
+
+	/**
+	 * Devuelve el coste del camino de coste mínimo entre origen y destino según
+	 * Floyd
+	 * 
+	 * @param nodoOrigen
+	 * @param nodoDestino
+	 * @return double
+	 */
+	public double minCostPath(T nodoOrigen, T nodoDestino) {
+		// Si no existe alguno de los nodos, lanza excepción
+		if (!existsNode(nodoOrigen) || !existsNode(nodoDestino))
+			throw new ElementNotPresentException("Uno de los nodos no existe");
+
+		// Si la matriz de costes no existe, la crea llamando a Floyd
+		if (getFloydA() == null)
+			floyd();
+
+		return getFloydA()[getNode(nodoOrigen)][getNode(nodoDestino)];
+	}
+
+	/**
+	 * Indica el camino entre los nodos que se le pasan como parámetros con el
+	 * formato siguiente:
+	 * Origen<tab>(coste0)<tabr>Inter1<tab>(coste1)<tabulador>InterN<
+	 * tab>(costeN)<tab>Destino<tab> – Si no hay camino:
+	 * Origen<tab>(Infinity)<tab>Destino<tab>
+	 * 
+	 * Si Origen y Destino coinciden: Origen<tab>
+	 * 
+	 * Si no existen los 2 nodos devuelve una cadena vacía
+	 * 
+	 * @param origen
+	 * @param destino
+	 * @return cadena
+	 */
+	public String path(T origen, T destino) {
+		this.cadena = "";
+
+		if (!existsNode(origen) && !existsNode(destino))
+			return this.cadena;
+		else if (getNode(origen) == getNode(destino))
+			this.cadena += origen.toString() + "\t";
+		else if (minCostPath(origen, destino) == Double.POSITIVE_INFINITY)
+			this.cadena += origen.toString() + "\t(" + Double.POSITIVE_INFINITY + ")\t" + destino.toString();
+		else {
+			this.cadena += origen.toString() + recursivePath(origen, destino) + destino.toString();
+		}
+
+		return this.cadena;
+	}
+
+	/**
+	 * Método que ayuda a formar el path de forma recursiva
+	 * 
+	 * @param origen
+	 * @param destino
+	 * @return cadena
+	 */
+	private String recursivePath(T origen, T destino) {
+		String cadena = "";
+		if (this.P == null)
+			floyd();
+		int k = this.P[getNode(origen)][getNode(destino)];
+		if (k != -1) {// en nuestro contexto significa que o bien existe camino directo o bien no
+						// existe camino
+			cadena += recursivePath(origen, this.nodes[k]) + this.nodes[k] + recursivePath(this.nodes[k], destino);
+		} else {
+			cadena += "\t(" + minCostPath(origen, destino) + ")\t";
+		}
+
+		return cadena;
+	}
+
+	/**
+	 * Lanza el recorrido en profundidad de un grafo desde un nodo determinado
+	 * 
+	 * Al recorrer cada nodo añade el toString del nodo y un tabulador
+	 * 
+	 * Si no existe el nodo devuelve una cadena vacía
+	 * 
+	 * @param source
+	 * @return cadena
+	 */
+	public String recorridoProfundidad(T source) {
+		this.cadena = "";
+		if (!existsNode(source)) {
+			return cadena;
+		}
+		boolean[] visited = new boolean[getSize()];
+		recursivoProfundidad(source, visited);
+		return this.cadena;
+	}
+
+	/**
+	 * Método auxiliar para calcular el recorrido en profundidad desde un nodo dado
+	 * 
+	 * @param source
+	 * @param visited
+	 */
+	private void recursivoProfundidad(T source, boolean[] visited) {
+		visited[getNode(source)] = true;
+		this.cadena += source.toString() + "\t";
+		// for each node w accessible from v do
+		for (int i = 0; i < this.size; i++) {
+			if (!visited[i] && existsEdge(source, this.nodes[i]))
+				recursivoProfundidad(nodes[i], visited);
+		}
 	}
 
 	/**
