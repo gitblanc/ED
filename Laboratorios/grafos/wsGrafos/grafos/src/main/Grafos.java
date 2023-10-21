@@ -4,6 +4,8 @@
 package main;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import exceptions.ElementNotPresentException;
 import exceptions.FullStructureException;
@@ -217,7 +219,7 @@ public class Grafos<T> {
 		if (!existsEdge(source, target))
 			return false;
 
-		int sourcePos = getNode(target);
+		int sourcePos = getNode(source);
 		int targetPos = getNode(target);
 
 		this.edges[sourcePos][targetPos] = false;
@@ -509,7 +511,7 @@ public class Grafos<T> {
 	private void recursivoProfundidad(T source, boolean[] visited) {
 		visited[getNode(source)] = true;
 		this.cadena += source.toString() + "\t";
-		// for each node w accessible from v do
+
 		for (int i = 0; i < this.size; i++) {
 			if (!visited[i] && existsEdge(source, this.nodes[i]))
 				recursivoProfundidad(nodes[i], visited);
@@ -546,5 +548,328 @@ public class Grafos<T> {
 			cadena += "\n";
 		}
 		return cadena;
+	}
+
+	// EJERCICIOS EXTRA PARA EXAMEN
+
+	public double excentricidad(T node) {
+		if (node == null)
+			throw new NullPointerException("el nodo no puede ser null");
+		if (getNode(node) == -1)
+			return -1;
+
+		floyd();
+
+		double[] maximos = new double[getSize()];
+		double maximo;
+		for (int i = 0; i < getSize(); i++) {
+			maximo = 0;
+			for (int j = 0; j < getSize(); j++) {
+				if (this.A[j][i] > maximo)
+					maximo = this.A[j][i];
+			}
+			maximos[i] = maximo;
+		}
+
+		double minimo = Double.POSITIVE_INFINITY;
+		for (int i = 0; i < maximos.length; i++) {
+			if (maximos[i] < minimo)
+				minimo = maximos[i];
+		}
+
+		return minimo;
+	}
+
+	public int centroGrafo() {
+		if (this.nodes.length == 0)
+			return -1;
+
+		floyd();
+
+		int[] maximos = new int[getSize()];
+		int maximo = 0;
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (this.A[i][j] > maximo)
+					maximo = j;
+			}
+			maximos[i] = maximo;
+		}
+
+		int minimo = (int) (Double.POSITIVE_INFINITY);
+		for (int i = 0; i < maximos.length; i++) {
+			if (maximos[i] < minimo)
+				minimo = maximos[i];
+		}
+
+		return minimo;
+	}
+
+	// Número de arcos que llegan a un nodo
+	public int calcularGradoEntrada(T node) {
+		int grado = 0;
+		int posNode = getNode(node);
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (j == posNode) {
+					if (this.edges[i][j])
+						grado += 1;
+				}
+			}
+		}
+
+		return grado;
+	}
+
+	// Número de arcos que salen de un nodo
+	public int calcularGradoSalida(T node) {
+		int grado = 0;
+		int posNode = getNode(node);
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (i == posNode) {
+					if (this.edges[i][j])
+						grado += 1;
+				}
+			}
+		}
+
+		return grado;
+	}
+
+	public int calcularGradoNodo(T node) {
+		return calcularGradoEntrada(node) + calcularGradoSalida(node);
+	}
+
+	// Sin entradas
+	public boolean esNodoFuente(T node) {
+		int posNode = getNode(node);
+
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (j == posNode) {
+					if (this.edges[i][j])
+						return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	// Sin salidas
+	public boolean esNodoSumidero(T node) {
+		int posNode = getNode(node);
+
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (i == posNode) {
+					if (this.edges[i][j])
+						return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	// Sin entradas ni salidas
+	public boolean esNodoAislado(T node) {
+		int posNode = getNode(node);
+
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (i == posNode) {
+					if (this.edges[i][j])
+						return false;
+				}
+				if (j == posNode) {
+					if (this.edges[i][j])
+						return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	// La densidad responde a la fórmula 2m/n(n-1) siendo m el número de arcos y n
+	// el número de nodos
+	// si d = 0, todos los vértices son aislados
+	// si d = 1, se trata de un grafo completo
+	public double densidadGrafo() {
+		int m = calcularNumeroAristas();
+		int n = getSize();
+		double densidad = (2.0 * m) / (n * (n - 1));
+		// Redondear el resultado a 2 decimales
+		return Math.round(densidad * 100.0) / 100.0;
+	}
+
+	private int calcularNumeroAristas() {
+		int cont = 0;
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (this.edges[i][j])
+					cont += 1;
+			}
+		}
+		return cont;
+	}
+
+	// para saber si el grafo es fuertemente conexo
+	public boolean esConexo() {
+		floyd();
+
+		for (int i = 0; i < getSize(); i++) {
+			for (int j = 0; j < getSize(); j++) {
+				if (this.A[i][j] == Double.POSITIVE_INFINITY)
+					return false;
+			}
+		}
+
+		return true;
+	}
+
+	public int contarSumideros() {
+		int cont = 0;
+		for (int i = 0; i < getSize(); i++) {
+			if (esNodoSumidero(this.nodes[i]))
+				cont += 1;
+		}
+		return cont;
+	}
+
+	public int contarFuentes() {
+		int cont = 0;
+		for (int i = 0; i < getSize(); i++) {
+			if (esNodoFuente(this.nodes[i]))
+				cont += 1;
+		}
+		return cont;
+	}
+
+	public int contarAislados() {
+		int cont = 0;
+		for (int i = 0; i < getSize(); i++) {
+			if (esNodoAislado(this.nodes[i]))
+				cont += 1;
+		}
+		return cont;
+	}
+
+	// suma de los nodos aislados mas los fuentes
+	public int contarInaccesibles() {
+		int cont = 0;
+		for (int i = 0; i < getSize(); i++) {
+			if (esNodoAislado(this.nodes[i]) || esNodoFuente(this.nodes[i]))
+				cont += 1;
+		}
+		return cont;
+	}
+
+	// comprueba si el grafo tiene ciclos
+	public boolean tieneCiclos() {
+		boolean[] visitados = new boolean[getSize()];
+		boolean[] enProceso = new boolean[getSize()];
+
+		for (int i = 0; i < getSize(); i++) {
+			if (!visitados[i] && tieneCicloUtil(i, visitados, enProceso)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean tieneCicloUtil(int nodo, boolean[] visitados, boolean[] enProceso) {
+		if (enProceso[nodo]) {
+			return true; // Ciclo detectado
+		}
+
+		if (visitados[nodo]) {
+			return false; // Ya se ha verificado este nodo, no hay ciclo
+		}
+
+		visitados[nodo] = true;
+		enProceso[nodo] = true;
+
+		for (int vecino = 0; vecino < getSize(); vecino++) {
+			if (edges[nodo][vecino] && tieneCicloUtil(vecino, visitados, enProceso)) {
+				return true;
+			}
+		}
+
+		enProceso[nodo] = false;
+		return false;
+	}
+
+	// calcula la longitud mínima entre dos nodos, es decir, el camino con menos
+	// pasos entre uno y otro
+	public int shortestPathLength(T source, T target) {
+		if (!existsNode(source) || !existsNode(target)) {
+			return -1; // Al menos uno de los nodos no existe en el grafo
+		}
+
+		boolean[] visitados = new boolean[getSize()];
+		Queue<T> cola = new LinkedList<>();
+		int[] distancias = new int[getSize()];
+
+		int sourceIndex = getNode(source);
+		int targetIndex = getNode(target);
+
+		cola.offer(nodes[sourceIndex]);
+		visitados[sourceIndex] = true;
+		distancias[sourceIndex] = 0;
+
+		while (!cola.isEmpty()) {
+			T nodoActual = cola.poll();
+			int nodoActualIndex = getNode(nodoActual);
+
+			for (int i = 0; i < getSize(); i++) {
+				if (edges[nodoActualIndex][i] && !visitados[i]) {
+					cola.offer(nodes[i]);
+					visitados[i] = true;
+					distancias[i] = distancias[nodoActualIndex] + 1;
+					if (i == targetIndex) {
+						return distancias[i]; // Se ha encontrado el nodo destino, devuelve la distancia
+					}
+				}
+			}
+		}
+
+		return -1; // No hay camino entre los nodos
+	}
+
+	public double caminoCosteMinimo(T source, T target) {
+		if (!existsNode(source) || !existsNode(target)) {
+			throw new ElementNotPresentException("Nodo no presente");
+		}
+
+		int sourceIndex = getNode(source);
+		int targetIndex = getNode(target);
+
+		// Si la matriz de rutas no ha sido calculada, llamar a floyd() para calcularla
+		if (getFloydA() == null) {
+			floyd();
+		}
+
+		// Si no hay camino entre los nodos, devolver -1
+		if (getFloydA()[sourceIndex][targetIndex] == Double.POSITIVE_INFINITY) {
+			return -1;
+		}
+
+		// Longitud del camino de coste mínimo entre los nodos source y target
+		return getFloydA()[sourceIndex][targetIndex];
+	}
+
+	// obtenemos el árbol libre abarcador a partir de un nodo
+	@SuppressWarnings("unchecked")
+	public boolean prim(T source) {
+		T[] U = (T[]) new Object[getSize()];
+		U[0] = source;
+
+		T[] T = (T[]) new Object[getSize()];
+
+		return true;
 	}
 }
