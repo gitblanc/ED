@@ -715,6 +715,14 @@ public class Grafos<T> {
 		}
 		return cont;
 	}
+	
+	//para un grafo dirigido
+	public double calcularCapacidadGrafo() {
+		if (tieneCiclos())
+			return (((getSize() * getSize()) + getSize()) / 2);
+		else
+			return (((getSize() * getSize()) - getSize()) / 2);
+	}
 
 	// para saber si el grafo es fuertemente conexo
 	public boolean esConexo() {
