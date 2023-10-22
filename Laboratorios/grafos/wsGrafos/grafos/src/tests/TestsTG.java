@@ -411,5 +411,4 @@ class TestsTG {
 		assertEquals(2, prim.get(4));
 		assertEquals(5, prim.get(5));
 	}
-
 }
