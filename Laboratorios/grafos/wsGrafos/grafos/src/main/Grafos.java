@@ -4,7 +4,10 @@
 package main;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import exceptions.ElementNotPresentException;
@@ -715,8 +718,8 @@ public class Grafos<T> {
 		}
 		return cont;
 	}
-	
-	//para un grafo dirigido
+
+	// para un grafo dirigido
 	public double calcularCapacidadGrafo() {
 		if (tieneCiclos())
 			return (((getSize() * getSize()) + getSize()) / 2);
@@ -870,14 +873,55 @@ public class Grafos<T> {
 		return getFloydA()[sourceIndex][targetIndex];
 	}
 
-	// obtenemos el árbol libre abarcador a partir de un nodo
-	@SuppressWarnings("unchecked")
-	public boolean prim(T source) {
-		T[] U = (T[]) new Object[getSize()];
-		U[0] = source;
+	// Método para encontrar el Árbol Libre Abarcador de coste mínimo usando el
+	// algoritmo de Prim
+	public List<T> prim(T source) {
+		if (!existsNode(source)) {
+			throw new ElementNotPresentException("Nodo no presente");
+		}
 
-		T[] T = (T[]) new Object[getSize()];
+		List<T> U = new ArrayList<>(); // Nodos evaluados
+		List<T> T = new ArrayList<>(); // Aristas del Árbol Libre Abarcador
+		T.add(source);
+		double[] minWeights = new double[getSize()]; // Almacena el peso mínimo para cada nodo
+		Arrays.fill(minWeights, Double.POSITIVE_INFINITY); // Inicializar pesos como infinito
+		int sourceIndex = getNode(source);
+		minWeights[sourceIndex] = 0; // Peso del nodo fuente es 0
 
-		return true;
+		while (U.size() < getSize()) {
+			int minWeightIndex = findMinWeightIndex(minWeights, U);
+			U.add(nodes[minWeightIndex]); // Marcar el nodo como evaluado
+
+			// Agregar la arista al Árbol Libre Abarcador si no es el nodo fuente
+			if (minWeights[minWeightIndex] != 0) {
+				T.add(nodes[minWeightIndex]);
+			}
+
+			// Actualizar los pesos mínimos de los nodos adyacentes que no han sido
+			// evaluados
+			for (int j = 0; j < getSize(); j++) {
+				if (edges[minWeightIndex][j] && weights[minWeightIndex][j] < minWeights[j] && !U.contains(nodes[j])) {
+					minWeights[j] = weights[minWeightIndex][j];
+				}
+			}
+		}
+
+		return T;
+	}
+
+	// Método auxiliar para encontrar el índice del nodo con peso mínimo
+	private int findMinWeightIndex(double[] minWeights, List<T> U) {
+		double minWeight = Double.POSITIVE_INFINITY;
+		int minWeightIndex = -1;
+		for (int i = 0; i < getSize(); i++) {
+			if (minWeights[i] < minWeight && !U.contains(nodes[i])) {
+				minWeight = minWeights[i];
+				minWeightIndex = i;
+			} else if (minWeights[i] == minWeight && !U.contains(nodes[i])) {
+				// Si hay un empate en los pesos, seleccionar el nodo más reciente
+				minWeightIndex = i;
+			}
+		}
+		return minWeightIndex;
 	}
 }
