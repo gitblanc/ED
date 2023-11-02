@@ -11,7 +11,7 @@ public class BSTree<T extends Comparable<T>> {
 	/**
 	 * getter del nodo raiz del arbol
 	 */
-	protected BSTNode<T> getRoot() {
+	public BSTNode<T> getRoot() {
 		return this.raiz;
 	}
 
@@ -30,7 +30,7 @@ public class BSTree<T extends Comparable<T>> {
 	 */
 	public boolean addNode(T clave) {
 		if (clave == null)
-			return false;
+			throw new NullPointerException("No puede ser nulo");
 
 		if (getRoot() == null) {
 			setRoot(new BSTNode<T>(clave));
@@ -43,7 +43,6 @@ public class BSTree<T extends Comparable<T>> {
 		return addNodeRecursivo(getRoot(), clave);
 	}
 
-	@SuppressWarnings("null")
 	private boolean addNodeRecursivo(BSTNode<T> root, T clave) {
 		if (root == null) {
 			root = new BSTNode<T>(clave);
@@ -115,7 +114,18 @@ public class BSTree<T extends Comparable<T>> {
 	 * de los nodos separados por tabuladores)
 	 */
 	public String postOrder() {
-		return "";
+		String recorrido = postOrderRecursivo(getRoot());
+		return recorrido.substring(0, recorrido.length() - 1);
+	}
+
+	private String postOrderRecursivo(BSTNode<T> root) {
+		String cadena = "";
+		if (root != null) {
+			cadena += postOrderRecursivo(root.getLeft());
+			cadena += postOrderRecursivo(root.getRight());
+			cadena += root.getInfo().toString() + "\t";
+		}
+		return cadena;
 	}
 
 	/**
@@ -123,7 +133,18 @@ public class BSTree<T extends Comparable<T>> {
 	 * de los nodos separados por tabuladores)
 	 */
 	public String inOrder() {
-		return "";
+		String recorrido = inOrderRecursivo(getRoot());
+		return recorrido.substring(0, recorrido.length() - 1);
+	}
+
+	private String inOrderRecursivo(BSTNode<T> root) {
+		String cadena = "";
+		if (root != null) {
+			cadena += inOrderRecursivo(root.getLeft());
+			cadena += root.getInfo().toString() + "\t";
+			cadena += inOrderRecursivo(root.getRight());
+		}
+		return cadena;
 	}
 
 	/**
@@ -201,7 +222,7 @@ public class BSTree<T extends Comparable<T>> {
 	 * @param esp El espaciado en numero de tabulaciones para indicar la profundidad
 	 * @return El String generado
 	 */
-	protected String tumbarArbol(BSTNode<T> p, int esp) {
+	public String tumbarArbol(BSTNode<T> p, int esp) {
 		StringBuilder cadena = new StringBuilder();
 
 		if (p != null) {

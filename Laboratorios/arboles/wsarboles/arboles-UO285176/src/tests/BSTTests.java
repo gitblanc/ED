@@ -19,7 +19,11 @@ class BSTTests {
 		assertEquals(true, tree.addNode(5));
 		assertEquals(false, tree.addNode(7));// ya existe
 
-		assertEquals(false, tree.addNode(null));
+		try {
+			tree.addNode(null);
+		} catch (NullPointerException e) {
+			System.out.println(e.getMessage());
+		}
 
 		assertEquals(true, tree.addNode(10));
 		assertEquals(true, tree.addNode(1));
@@ -87,19 +91,19 @@ class BSTTests {
 		assertEquals(true, tree.removeNode(1));
 		System.out.println("Eliminamos la clave 1");
 		System.out.println(tree.toString());
-		
+
 		assertEquals(true, tree.removeNode(4));
 		System.out.println("Eliminamos la clave 4");
 		System.out.println(tree.toString());
-		
+
 		assertEquals(true, tree.removeNode(8));
 		System.out.println("Eliminamos la clave 8");
 		System.out.println(tree.toString());
-		
+
 		assertEquals(true, tree.removeNode(7));
 		System.out.println("Eliminamos la clave 7");
 		System.out.println(tree.toString());
-		
+
 		assertEquals(true, tree.removeNode(10));
 		System.out.println("Eliminamos la clave 10");
 		System.out.println(tree.toString());
