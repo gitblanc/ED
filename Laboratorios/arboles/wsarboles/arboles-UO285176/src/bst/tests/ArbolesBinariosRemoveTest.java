@@ -1,4 +1,4 @@
-package tests;
+package bst.tests;
 
 import static org.junit.Assert.*;
 
