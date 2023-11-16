@@ -1,12 +1,10 @@
 package avl.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
 import avl.AVLTree;
 
-class RotationTests {
+public class RotationTests {
 
 	@Test
 	void test() {

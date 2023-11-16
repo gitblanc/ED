@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import avl.AVLNode;
 
-class UpdateBFHeightTests {
+public class UpdateBFHeightTests {
 
 	@Test
 	void test() {

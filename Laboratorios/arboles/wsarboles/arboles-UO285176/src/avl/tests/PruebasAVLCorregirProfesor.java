@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import avl.AVLTree;
 
-class PruebasAVLCorregirProfesor {
+public class PruebasAVLCorregirProfesor {
 
 	@Test
 	public void testAddRemove() {

@@ -1,24 +1,24 @@
-package avl;
+package avl_modificado;
 
 /**
  * @author UO285176 - Eduardo Blanco Bielsa
  * @version 2023-24 distribuible
  */
-public class AVLTree<T extends Comparable<T>> {
+public class AVLTreeInverso<T extends Comparable<T>> {
 
-	private AVLNode<T> raiz;
+	private AVLNodeInverso<T> raiz;
 
 	/**
 	 * getter del nodo raiz del arbol
 	 */
-	public AVLNode<T> getRoot() {
+	public AVLNodeInverso<T> getRoot() {
 		return this.raiz;
 	}
 
 	/**
 	 * setter del nodo raiz del arbol
 	 */
-	protected void setRoot(AVLNode<T> nodo) {
+	protected void setRoot(AVLNodeInverso<T> nodo) {
 		this.raiz = nodo;
 	}
 
@@ -33,26 +33,26 @@ public class AVLTree<T extends Comparable<T>> {
 			throw new NullPointerException("No puede ser nulo");
 
 		if (getRoot() == null) {
-			setRoot(new AVLNode<T>(clave));
+			setRoot(new AVLNodeInverso<T>(clave));
 			return true;
 		}
 
 		if (searchNode(clave) != null)
 			return false;// ya existía
 
-		AVLNode<T> node = addNodeRecursivo(getRoot(), clave);
+		AVLNodeInverso<T> node = addNodeRecursivo(getRoot(), clave);
 		setRoot(node);
 		return true;
 	}
 
-	private AVLNode<T> addNodeRecursivo(AVLNode<T> root, T clave) {
+	private AVLNodeInverso<T> addNodeRecursivo(AVLNodeInverso<T> root, T clave) {
 		if (root == null) {
-			root = new AVLNode<T>(clave);
+			root = new AVLNodeInverso<T>(clave);
 			return updateBFHeightBalanceo(root);
 		}
 		if (root.getInfo().compareTo(clave) > 0) { // raiz mayor que clave
 			if (root.getLeft() == null) {
-				root.setLeft(new AVLNode<T>(clave));
+				root.setLeft(new AVLNodeInverso<T>(clave));
 				return updateBFHeightBalanceo(root);
 			} else {
 				root.setLeft(addNodeRecursivo(root.getLeft(), clave));// busca por la izquierda
@@ -60,7 +60,7 @@ public class AVLTree<T extends Comparable<T>> {
 			}
 		} else if (root.getInfo().compareTo(clave) < 0) {// raiz menor que clave
 			if (root.getRight() == null) {
-				root.setRight(new AVLNode<T>(clave));
+				root.setRight(new AVLNodeInverso<T>(clave));
 				return updateBFHeightBalanceo(root);
 			} else {
 				root.setRight(addNodeRecursivo(root.getRight(), clave));// busca por la derecha
@@ -75,14 +75,14 @@ public class AVLTree<T extends Comparable<T>> {
 	 * que cumple que es "equals" con el buscado, null si no lo encuentra por
 	 * cualquier motivo
 	 */
-	public AVLNode<T> searchNode(T clave) {
+	public AVLNodeInverso<T> searchNode(T clave) {
 		if (clave == null || getRoot() == null)
 			return null;
 
 		return searchNodeRecursivo(getRoot(), clave);
 	}
 
-	private AVLNode<T> searchNodeRecursivo(AVLNode<T> root, T clave) {
+	private AVLNodeInverso<T> searchNodeRecursivo(AVLNodeInverso<T> root, T clave) {
 		if (root == null)
 			return null;
 		if (root.getInfo().compareTo(clave) == 0)
@@ -104,7 +104,7 @@ public class AVLTree<T extends Comparable<T>> {
 		return recorrido.substring(0, recorrido.length() - 1);
 	}
 
-	private String preOrderRecursivo(AVLNode<T> root) {
+	private String preOrderRecursivo(AVLNodeInverso<T> root) {
 		if (root == null)
 			return "";
 
@@ -124,7 +124,7 @@ public class AVLTree<T extends Comparable<T>> {
 		return recorrido.substring(0, recorrido.length() - 1);
 	}
 
-	private String postOrderRecursivo(AVLNode<T> root) {
+	private String postOrderRecursivo(AVLNodeInverso<T> root) {
 		String cadena = "";
 		if (root != null) {
 			cadena += postOrderRecursivo(root.getLeft());
@@ -143,7 +143,7 @@ public class AVLTree<T extends Comparable<T>> {
 		return recorrido.substring(0, recorrido.length() - 1);
 	}
 
-	private String inOrderRecursivo(AVLNode<T> root) {
+	private String inOrderRecursivo(AVLNodeInverso<T> root) {
 		String cadena = "";
 		if (root != null) {
 			cadena += inOrderRecursivo(root.getLeft());
@@ -162,7 +162,7 @@ public class AVLTree<T extends Comparable<T>> {
 		if (clave == null)
 			throw new NullPointerException("El nodo no puede ser nulo");
 
-		AVLNode<T> node = searchNode(clave);
+		AVLNodeInverso<T> node = searchNode(clave);
 
 		if (node == null)
 			return false;
@@ -172,13 +172,15 @@ public class AVLTree<T extends Comparable<T>> {
 		return true;
 	}
 
-	private AVLNode<T> removeNodeRecursivo(AVLNode<T> root, T clave) {
+	private AVLNodeInverso<T> removeNodeRecursivo(AVLNodeInverso<T> root, T clave) {
 		if (root.getInfo().compareTo(clave) > 0) {// raiz mayor que clave
-			AVLNode<T> nodo = removeNodeRecursivo(root.getLeft(), clave);// busca el nodo por la izquierda a eliminar
+			AVLNodeInverso<T> nodo = removeNodeRecursivo(root.getLeft(), clave);// busca el nodo por la izquierda a
+																				// eliminar
 			root.setLeft(nodo);
 			return updateBFHeightBalanceo(root);
 		} else if (root.getInfo().compareTo(clave) < 0) {// raiz menor que clave
-			AVLNode<T> nodo = removeNodeRecursivo(root.getRight(), clave);// busca el nodo por la derecha a eliminar
+			AVLNodeInverso<T> nodo = removeNodeRecursivo(root.getRight(), clave);// busca el nodo por la derecha a
+																					// eliminar
 			root.setRight(nodo);
 			return updateBFHeightBalanceo(root);
 		} else {// si encuentra el nodo a borrar -> 3 casos
@@ -196,7 +198,7 @@ public class AVLTree<T extends Comparable<T>> {
 			}
 			// Si tiene dos hijos
 			else {
-				AVLNode<T> nodeMax = searchMaxNode(root.getLeft());// saca el nodo máximo del subárbol izquierdo
+				AVLNodeInverso<T> nodeMax = searchMaxNode(root.getLeft());// saca el nodo máximo del subárbol izquierdo
 				root.setLeft(removeNodeRecursivo(root.getLeft(), nodeMax.getInfo()));// elimina el nodo máximo
 				root.setInfo(nodeMax.getInfo());// actualiza la información del nodo a eliminar
 				return updateBFHeightBalanceo(root);
@@ -206,7 +208,7 @@ public class AVLTree<T extends Comparable<T>> {
 
 	// Método que busca el nodo máximo del subárbol izquierdo invocado por el
 	// removeNodeRecursivo
-	private AVLNode<T> searchMaxNode(AVLNode<T> root) {
+	private AVLNodeInverso<T> searchMaxNode(AVLNodeInverso<T> root) {
 		if (root.getRight() != null)
 			return searchMaxNode(root.getRight());
 		else
@@ -228,7 +230,7 @@ public class AVLTree<T extends Comparable<T>> {
 	 * @param esp El espaciado en numero de tabulaciones para indicar la profundidad
 	 * @return El String generado
 	 */
-	public String tumbarArbol(AVLNode<T> p, int esp) {
+	public String tumbarArbol(AVLNodeInverso<T> p, int esp) {
 		StringBuilder cadena = new StringBuilder();
 
 		if (p != null) {
@@ -248,19 +250,20 @@ public class AVLTree<T extends Comparable<T>> {
 	 * es necesario (cuando su |BF| es >1) y lo devuelve una vez se han actualizado
 	 * su altura y factor de balance
 	 */
-	private AVLNode<T> updateBFHeightBalanceo(AVLNode<T> nodo) {
+	private AVLNodeInverso<T> updateBFHeightBalanceo(AVLNodeInverso<T> nodo) {
 		nodo.updateBFHeight();
 
+		// CAMBIAMOS EL FACTOR DE BALANCE Y LAS ROTACIONES
 		// Rotación izquierda
-		if (nodo.getBf() == -2) {
-			if (nodo.getLeft().getBf() == 1)
+		if (nodo.getBf() == 2) {
+			if (nodo.getLeft().getBf() == -1)
 				nodo = doubleLeftRotation(nodo);
 			else
 				nodo = singleLeftRotation(nodo);
 		}
 		// Rotación derecha
-		else if (nodo.getBf() == 2) {
-			if (nodo.getRight().getBf() == -1)
+		else if (nodo.getBf() == -2) {
+			if (nodo.getRight().getBf() == 1)
 				nodo = doubleRightRotation(nodo);
 			else
 				nodo = singleRightRotation(nodo);
@@ -273,8 +276,8 @@ public class AVLTree<T extends Comparable<T>> {
 	 * Método que se encarga de realizar una rotación simple a la izquierda sobre el
 	 * subárbol del nodo pasado como parámetro y devuelve el nodo resultante
 	 */
-	private AVLNode<T> singleLeftRotation(AVLNode<T> nodo) {
-		AVLNode<T> aux = nodo.getLeft();
+	private AVLNodeInverso<T> singleLeftRotation(AVLNodeInverso<T> nodo) {
+		AVLNodeInverso<T> aux = nodo.getLeft();
 		nodo.setLeft(aux.getRight());
 		nodo.updateBFHeight();
 		aux.setRight(nodo);
@@ -286,8 +289,8 @@ public class AVLTree<T extends Comparable<T>> {
 	 * Método que se encarga de realizar una rotación simple a la derecha sobre el
 	 * subárbol del nodo pasado como parámetro y devuelve el nodo resultante
 	 */
-	private AVLNode<T> singleRightRotation(AVLNode<T> nodo) {
-		AVLNode<T> aux = nodo.getRight();
+	private AVLNodeInverso<T> singleRightRotation(AVLNodeInverso<T> nodo) {
+		AVLNodeInverso<T> aux = nodo.getRight();
 		nodo.setRight(aux.getLeft());
 		nodo.updateBFHeight();
 		aux.setLeft(nodo);
@@ -299,7 +302,7 @@ public class AVLTree<T extends Comparable<T>> {
 	 * Método que se encarga de realizar una rotación doble a la izquierda sobre el
 	 * subárbol del nodo pasado como parámetro y devuelve el nodo resultante
 	 */
-	private AVLNode<T> doubleLeftRotation(AVLNode<T> nodo) {
+	private AVLNodeInverso<T> doubleLeftRotation(AVLNodeInverso<T> nodo) {
 		nodo.setLeft(singleRightRotation(nodo.getLeft()));
 		return singleLeftRotation(nodo);
 	}
@@ -308,8 +311,94 @@ public class AVLTree<T extends Comparable<T>> {
 	 * Método que se encarga de realizar una rotación doble a la derecha sobre el
 	 * subárbol del nodo pasado como parámetro y devuelve el nodo resultante
 	 */
-	private AVLNode<T> doubleRightRotation(AVLNode<T> nodo) {
+	private AVLNodeInverso<T> doubleRightRotation(AVLNodeInverso<T> nodo) {
 		nodo.setRight(singleLeftRotation(nodo.getRight()));
 		return singleRightRotation(nodo);
 	}
+
+	public AVLNodeInverso<T> devolverPadre(T clave) {
+		AVLNodeInverso<T> nodo = searchNode(clave);
+
+		if (nodo == null)
+			return null;
+
+		return devolverPadreRecursivo(getRoot(), nodo, null);
+	}
+
+	private AVLNodeInverso<T> devolverPadreRecursivo(AVLNodeInverso<T> root, AVLNodeInverso<T> nodo,
+			AVLNodeInverso<T> padre) {
+		if (root == null)
+			return null;
+
+		if (root.getInfo().compareTo(nodo.getInfo()) == 0)
+			return padre;
+		if (root.getInfo().compareTo(nodo.getInfo()) > 0) { // si la raiz es mayor que la clave
+			return devolverPadreRecursivo(root.getLeft(), nodo, root); // busca por la izquierda
+		} else if (root.getInfo().compareTo(nodo.getInfo()) < 0) {// si la raiz es menor que la clave
+			return devolverPadreRecursivo(root.getRight(), nodo, root);// busca por la derecha
+		} else
+			return null;
+	}
+
+	public int contarAristas(T clave1, T clave2) {
+		if (getRoot() == null || clave1 == null || clave2 == null)
+			return 0;
+
+		AVLNodeInverso<T> nodo1 = searchNode(clave1);
+		AVLNodeInverso<T> nodo2 = searchNode(clave2);
+
+		if (nodo1 == null || nodo2 == null)
+			return 0;
+
+		// Obtenemos el ancestro común más bajo de ambos nodos
+		AVLNodeInverso<T> ancestroComun = encontrarAncestroComun(getRoot(), nodo1, nodo2);
+
+		// Calculamos la distancia de cada nodo al ancestro común
+		int distanciaNodo1 = distanciaAlAncestro(nodo1, ancestroComun, 0);
+		int distanciaNodo2 = distanciaAlAncestro(nodo2, ancestroComun, 0);
+
+		// Sumamos las distancias para obtener el número de aristas entre los nodos
+		return distanciaNodo1 + distanciaNodo2;
+	}
+
+	// Método para encontrar el ancestro común más bajo de dos nodos en el árbol
+	private AVLNodeInverso<T> encontrarAncestroComun(AVLNodeInverso<T> root, AVLNodeInverso<T> nodo1,
+			AVLNodeInverso<T> nodo2) {
+		if (root == null || nodo1 == null || nodo2 == null)
+			return null;
+
+		if ((nodo1.getInfo().compareTo(root.getInfo()) < 0 && nodo2.getInfo().compareTo(root.getInfo()) > 0)
+				|| (nodo1.getInfo().compareTo(root.getInfo()) > 0 && nodo2.getInfo().compareTo(root.getInfo()) < 0)) {
+			// Si los nodos están en lados opuestos del ancestro actual, encontramos el
+			// ancestro común
+			return root;
+		} else if (nodo1.getInfo().compareTo(root.getInfo()) < 0 && nodo2.getInfo().compareTo(root.getInfo()) < 0) {
+			// Si ambos nodos están en el subárbol izquierdo, buscamos en el subárbol
+			// izquierdo
+			return encontrarAncestroComun(root.getLeft(), nodo1, nodo2);
+		} else {
+			// Si ambos nodos están en el subárbol derecho, buscamos en el subárbol derecho
+			return encontrarAncestroComun(root.getRight(), nodo1, nodo2);
+		}
+	}
+
+	// Método para calcular la distancia de un nodo al ancestro común más bajo
+	private int distanciaAlAncestro(AVLNodeInverso<T> nodo, AVLNodeInverso<T> ancestroComun, int distancia) {
+		if (nodo == null)
+			return 0;
+
+		if (nodo.getInfo().compareTo(ancestroComun.getInfo()) == 0) {
+			// Hemos llegado al ancestro común
+			return distancia;
+		} else if (nodo.getInfo().compareTo(ancestroComun.getInfo()) < 0) {
+			// Si el nodo está en el subárbol izquierdo, incrementamos la distancia y
+			// continuamos
+			return distanciaAlAncestro(nodo, ancestroComun.getLeft(), distancia + 1);
+		} else {
+			// Si el nodo está en el subárbol derecho, incrementamos la distancia y
+			// continuamos
+			return distanciaAlAncestro(nodo, ancestroComun.getRight(), distancia + 1);
+		}
+	}
+
 }

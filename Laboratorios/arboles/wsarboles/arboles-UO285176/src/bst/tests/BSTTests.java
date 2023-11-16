@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import bst.BSTree;
 
-class BSTTests {
+public class BSTTests {
 
 	@Test
 	void testAddNode() {
