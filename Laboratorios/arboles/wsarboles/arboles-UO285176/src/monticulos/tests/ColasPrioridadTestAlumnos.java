@@ -202,60 +202,60 @@ class ColasPrioridadTestAlumnos {
 
 	}
 
-//	/**
-//	 * Test para probar el metodo cambiarPrioridad
-//	 */
-//	@Test
-//	public void testCambiarPrioridad() {
-//		EDBinaryHeapMin<Integer> b = new EDBinaryHeapMin<>(100);
-//		assertEquals(true, b.add(1));
-//
-//		assertThrows(NullPointerException.class, () -> b.cambiarPrioridad(0, null));
-//
-//		assertEquals(false, b.cambiarPrioridad(-1, 2));
-//		assertEquals(false, b.cambiarPrioridad(1, 2));
-//
-//		assertEquals(true, b.cambiarPrioridad(0, 2));
-//		assertEquals(-1, b.searchElement(1));
-//
-//		b.clear();
-//		assertTrue(b.isEmpty());
-//
-//		assertEquals(true, b.add(60));
-//		assertEquals(true, b.add(40));
-//		assertEquals(true, b.add(80));
-//		assertEquals(true, b.add(20));
-//		assertEquals(true, b.add(55));
-//		assertEquals(true, b.add(65));
-//		assertEquals(true, b.add(63));
-//		assertEquals(true, b.add(51));
-//		assertEquals(true, b.add(75));
-//		assertEquals(true, b.add(2));
-//		assertEquals(true, b.add(4));
-//		assertEquals(true, b.add(90));
-//		assertEquals(true, b.add(95));
-//		assertEquals(true, b.add(99));
-//		assertEquals(true, b.add(41));
-//		assertEquals("2\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t99\t65", b.toString());
-//
-//		assertEquals(true, b.cambiarPrioridad(0, 1));
-//		assertEquals("1\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t99\t65", b.toString());
-//		assertEquals(true, b.cambiarPrioridad(0, 3));
-//		assertEquals("3\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t99\t65", b.toString());
-//		assertEquals(true, b.cambiarPrioridad(b.searchElement(65), 64));
-//		assertEquals("3\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t99\t64", b.toString());
-//		assertEquals(true, b.cambiarPrioridad(b.searchElement(99), 100));
-//		assertEquals("3\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t100\t64", b.toString());
-//		assertEquals(true, b.cambiarPrioridad(b.searchElement(75), 50));
-//		assertEquals("3\t4\t41\t50\t20\t80\t63\t60\t51\t55\t40\t90\t95\t100\t64", b.toString());
-//		assertEquals(true, b.cambiarPrioridad(b.searchElement(4), 70));
-//		assertEquals("3\t20\t41\t50\t40\t80\t63\t60\t51\t55\t70\t90\t95\t100\t64", b.toString());
-//		assertEquals(true, b.cambiarPrioridad(0, 45));
-//		assertEquals("20\t40\t41\t50\t45\t80\t63\t60\t51\t55\t70\t90\t95\t100\t64", b.toString());
-//		assertEquals(true, b.cambiarPrioridad(0, 90));
-//		assertEquals("40\t45\t41\t50\t55\t80\t63\t60\t51\t90\t70\t90\t95\t100\t64", b.toString());
-//		assertEquals(true, b.cambiarPrioridad(b.searchElement(95), 5));
-//		assertEquals("5\t45\t40\t50\t55\t41\t63\t60\t51\t90\t70\t90\t80\t100\t64", b.toString());
-//	}
+	/**
+	 * Test para probar el metodo cambiarPrioridad
+	 */
+	@Test
+	public void testCambiarPrioridad() {
+		EDBinaryHeapMin<Integer> b = new EDBinaryHeapMin<>(100);
+		assertEquals(true, b.add(1));
+
+		assertThrows(NullPointerException.class, () -> b.cambiarPrioridad(0, null));
+
+		assertEquals(false, b.cambiarPrioridad(-1, 2));
+		assertEquals(false, b.cambiarPrioridad(1, 2));
+
+		assertEquals(true, b.cambiarPrioridad(0, 2));
+		assertEquals(-1, b.searchElement(1));
+
+		b.clear();
+		assertTrue(b.isEmpty());
+
+		assertEquals(true, b.add(60));
+		assertEquals(true, b.add(40));
+		assertEquals(true, b.add(80));
+		assertEquals(true, b.add(20));
+		assertEquals(true, b.add(55));
+		assertEquals(true, b.add(65));
+		assertEquals(true, b.add(63));
+		assertEquals(true, b.add(51));
+		assertEquals(true, b.add(75));
+		assertEquals(true, b.add(2));
+		assertEquals(true, b.add(4));
+		assertEquals(true, b.add(90));
+		assertEquals(true, b.add(95));
+		assertEquals(true, b.add(99));
+		assertEquals(true, b.add(41));
+		assertEquals("2\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t99\t65", b.toString());
+
+		assertEquals(true, b.cambiarPrioridad(0, 1));
+		assertEquals("1\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t99\t65", b.toString());
+		assertEquals(true, b.cambiarPrioridad(0, 3));
+		assertEquals("3\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t99\t65", b.toString());
+		assertEquals(true, b.cambiarPrioridad(b.searchElement(65), 64));
+		assertEquals("3\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t99\t64", b.toString());
+		assertEquals(true, b.cambiarPrioridad(b.searchElement(99), 100));
+		assertEquals("3\t4\t41\t51\t20\t80\t63\t60\t75\t55\t40\t90\t95\t100\t64", b.toString());
+		assertEquals(true, b.cambiarPrioridad(b.searchElement(75), 50));
+		assertEquals("3\t4\t41\t50\t20\t80\t63\t60\t51\t55\t40\t90\t95\t100\t64", b.toString());
+		assertEquals(true, b.cambiarPrioridad(b.searchElement(4), 70));
+		assertEquals("3\t20\t41\t50\t40\t80\t63\t60\t51\t55\t70\t90\t95\t100\t64", b.toString());
+		assertEquals(true, b.cambiarPrioridad(0, 45));
+		assertEquals("20\t40\t41\t50\t45\t80\t63\t60\t51\t55\t70\t90\t95\t100\t64", b.toString());
+		assertEquals(true, b.cambiarPrioridad(0, 90));
+		assertEquals("40\t45\t41\t50\t55\t80\t63\t60\t51\t90\t70\t90\t95\t100\t64", b.toString());
+		assertEquals(true, b.cambiarPrioridad(b.searchElement(95), 5));
+		assertEquals("5\t45\t40\t50\t55\t41\t63\t60\t51\t90\t70\t90\t80\t100\t64", b.toString());
+	}
 
 }

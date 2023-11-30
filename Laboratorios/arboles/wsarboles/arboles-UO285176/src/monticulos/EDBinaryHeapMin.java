@@ -83,12 +83,7 @@ public class EDBinaryHeapMin<T extends Comparable<T>> implements EDPriorityQueue
 	}
 
 	private boolean existsElement(T info) {
-		for (int i = 0; i < numElementos; i++) {
-			if (this.monticulo[i].equals(info)) {
-				return true;
-			}
-		}
-		return false;
+		return searchElement(info) != -1 ? true : false;
 	}
 
 	/**
@@ -134,7 +129,20 @@ public class EDBinaryHeapMin<T extends Comparable<T>> implements EDPriorityQueue
 	 */
 	@Override
 	public boolean cambiarPrioridad(int pos, T elemento) {
-		return false;// TO DO
+		if (isEmpty() || pos < 0 || pos >= getNumElementos()) {
+			return false;
+		} else if (elemento == null) {
+			throw new NullPointerException("El elemento es nulo");
+		} else {
+			T original = this.monticulo[pos];
+			this.monticulo[pos] = elemento;
+			if (elemento.compareTo(original) > 0) {
+				filtradoDescendente(pos);
+			} else if (elemento.compareTo(original) < 0) {
+				filtradoAscendente(pos);
+			}
+			return true;
+		}
 	}
 
 	/**
@@ -214,12 +222,34 @@ public class EDBinaryHeapMin<T extends Comparable<T>> implements EDPriorityQueue
 	 * @return
 	 */
 	public int searchElement(T elem) {
-		for (int i = 0; i < getNumElementos(); i++) {
-			if (this.monticulo[i].compareTo(elem) == 0)
-				return i;
-		}
-		return -1;
+		// Iterativo
+//		for (int i = 0; i < getNumElementos(); i++) {
+//			if (this.monticulo[i].compareTo(elem) == 0)
+//				return i;
+//		}
+//		return -1;
+		// Recursivo
+		if (elem == null || isEmpty())
+			return -1;
+		return searchElementRecursive(elem, 0);// empezamos en el padre
+	}
 
+	private int searchElementRecursive(T elemToFind, int pos) {
+		if (pos >= getNumElementos() || pos < 0) {
+			return -1; // Se alcanzó un nodo sin hijos válidos o fuera de los límites
+		}
+		if (this.monticulo[pos].compareTo(elemToFind) == 0) {
+			return pos; // Elemento encontrado
+		}
+		// Buscar en el hijo izquierdo si el elemento es menor que el nodo actual
+		if (this.monticulo[pos].compareTo(elemToFind) < 0) {
+			int leftChild = searchElementRecursive(elemToFind, 2 * pos + 1);
+			if (leftChild != -1) {
+				return leftChild; // Si el hijo se encuentra por la rama izquierda
+			}
+		}
+		// Buscar en la rama derecha
+		return searchElementRecursive(elemToFind, 2 * pos + 2);
 	}
 
 }

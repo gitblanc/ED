@@ -39,4 +39,20 @@ class BinaryHeapMinTestsUO285176 {
 		System.out.println(monticulo.toString());
 	}
 
+	@Test
+	void testRemove() {
+		EDBinaryHeapMin<Integer> monticulo = new EDBinaryHeapMin<>(9);
+		assertTrue(monticulo.add(1));
+		assertTrue(monticulo.add(2));
+		assertTrue(monticulo.add(3));
+		assertTrue(monticulo.add(4));
+		assertTrue(monticulo.add(5));
+		assertTrue(monticulo.add(7));
+		assertTrue(monticulo.add(8));
+		assertTrue(monticulo.add(9));
+		System.out.println(monticulo.toString());
+		assertEquals(true, monticulo.remove(5));
+		System.out.println(monticulo.toString());
+	}
+
 }
