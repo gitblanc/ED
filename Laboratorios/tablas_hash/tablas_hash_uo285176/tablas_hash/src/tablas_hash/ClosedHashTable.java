@@ -89,36 +89,49 @@ public class ClosedHashTable<T> extends AbstractHash<T> {
 	protected int fDispersionClosed(T info, int intentos) {
 		int clave = fHash(info);
 		switch (this.exploracion) {
-		case LINEAL:
-			return (clave + intentos) % getSize();
 		case CUADRATICA:
 			return (clave + intentos * intentos) % getSize();
+		case DOBLEHASH:
+			int primoAntecesor = previousPrimeNumber(getSize()-1);
+			return (clave + (intentos * calculaSalto(primoAntecesor, clave))) % getSize();
+		case LINEAL:
 		default:
-			// TO DO FALTA
-			return -1;
+			return (clave + intentos) % getSize();
 		}
+	}
+
+	/*
+	 * Método privado que actúa como función de cálculo de salto para la dispersión
+	 * doble
+	 */
+	private int calculaSalto(int primoAntecesor, int clave) {
+		return (primoAntecesor - clave) % primoAntecesor;
 	}
 
 	@Override
 	public T find(T elem) {
 		// Completar lo que falta...
+		return null;
 	}
 
 	@Override
 	public boolean remove(T elem) {
 		// Completar lo que falta...
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected boolean reDispersion() { // Para la segunda clase
 		// Completar lo que falta...
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected boolean inverseReDispersion() { // Para la segunda clase
 		// Completar lo que falta...
+		return false;
 	}
 
 	/*
@@ -130,7 +143,8 @@ public class ClosedHashTable<T> extends AbstractHash<T> {
 	public String toString() {
 		StringBuilder cadena = new StringBuilder();
 		for (int i = 0; i < getSize(); i++) {
-			cadena.append(associativeArray[i]);
+			// cadena.append(associativeArray[i]);
+			cadena.append(this.tabla[i]);
 			cadena.append(";");
 		}
 		cadena.append("[Size: ");
