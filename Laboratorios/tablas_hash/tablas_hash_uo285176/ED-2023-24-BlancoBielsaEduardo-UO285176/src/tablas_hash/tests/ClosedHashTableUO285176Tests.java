@@ -73,4 +73,32 @@ class ClosedHashTableUO285176Tests {
 				a.toString());
 	}
 
+	@Test
+	public void testSearch() {
+		ClosedHashTable<Integer> a = new ClosedHashTable<>(5, 0);// LINEAL
+
+		assertThrows(NullPointerException.class, () -> {
+			a.add(null);
+		}); // A�ade null
+
+		assertEquals(true, a.add(1));
+		assertEquals(true, a.add(2));
+		assertEquals(true, a.add(3));
+		assertEquals("{_E_};{1};{2};{3};{_E_};[Size: 5 Num.Elems.: 3]", a.toString());
+		assertEquals(3, a.find(3));// BUSCA UNO QUE EXISTE
+
+		assertEquals(true, a.add(4));
+		assertEquals(true, a.add(9));
+		assertEquals("{9};{1};{2};{3};{4};[Size: 5 Num.Elems.: 5]", a.toString());
+
+		assertEquals(false, a.add(6)); // Añade con tabla llena
+		assertEquals("{9};{1};{2};{3};{4};[Size: 5 Num.Elems.: 5]", a.toString());
+
+		assertEquals(null, a.find(null));// BUSCA UN null
+		assertEquals(null, a.find(78));// BUSCA UNO QUE NO EXISTE
+		assertEquals(3, a.find(3));// existe
+		assertEquals(true, a.remove(3));
+		assertEquals(null, a.find(3));// BUSCA UNO BORRADO
+	}
+
 }
