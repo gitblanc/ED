@@ -1,4 +1,4 @@
-package p4Hash;
+package tablas_hash;
 
 /**
  * @author Profesores ED
@@ -15,7 +15,7 @@ public abstract class AbstractHash <T>{
 
 
 	/**
-	 * Devuelve el tamaño de la tabla Hash
+	 * Devuelve el tamaï¿½o de la tabla Hash
 	 */
 	abstract public int getSize();
 	
@@ -38,13 +38,13 @@ public abstract class AbstractHash <T>{
 	abstract public boolean remove(T elem);
 
 	/**
-	 * Realiza una redispersion (aumentando el tamaño) al numero primo mayor que el doble del tamaño actual, 
+	 * Realiza una redispersion (aumentando el tamaï¿½o) al numero primo mayor que el doble del tamaï¿½o actual, 
 	 *  recolocando los elementos, e indicando si lo realiza correctamente o no 
 	 */
 	abstract protected boolean reDispersion ();
 
 	/**
-	* Realiza una redispersion inversa (disminuyendo el tamaño) al número primo menor que la mitad del tamaño actual, 
+	* Realiza una redispersion inversa (disminuyendo el tamaï¿½o) al nï¿½mero primo menor que la mitad del tamaï¿½o actual, 
 	* recolocando los elementos, e indicando si lo realiza correctamente o no 
 	*/
 	abstract protected boolean inverseReDispersion();

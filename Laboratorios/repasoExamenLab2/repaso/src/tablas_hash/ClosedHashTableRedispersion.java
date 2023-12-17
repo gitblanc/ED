@@ -5,7 +5,7 @@ package tablas_hash;
  * @version 2023-24 distribuible
  *
  */
-public class ClosedHashTable<T> extends AbstractHash<T> {
+public class ClosedHashTableRedispersion<T> extends AbstractHash<T> {
 // IMPORTANTE
 //	No cambiar el nombre ni visibilidad de los atributos protected
 
@@ -20,13 +20,19 @@ public class ClosedHashTable<T> extends AbstractHash<T> {
 
 	protected int exploracion; // exploracion que se realizara en caso de colision (LINEAL por defecto)
 
+	private static final double MAX_LF = 0.5;
+	private static final double MIN_LF = 0.16;
+
+	private double maxlf;
+	private double minlf;
+
 	/**
 	 * Constructor para fijar el tamano al numero primo >= que el parametro y el
 	 * tipo de exploración al indicado el tipo de exploracion(LINEAL=0,
 	 * CUADRATICA=1, ...), si invalido LINEAL
 	 */
 	@SuppressWarnings("unchecked")
-	public ClosedHashTable(int tam, int expl) {
+	public ClosedHashTableRedispersion(int tam, int expl) {
 		hashSize = nextPrimeNumber(tam);// Establece un tamaño valido si tam no es primo
 
 		tabla = (HashNode<T>[]) new HashNode[hashSize]; // Crea el array de HashNode's
@@ -49,9 +55,10 @@ public class ClosedHashTable<T> extends AbstractHash<T> {
 	 * (inversa) el tipo de exploracion(LINEAL=0, CUADRATICA=1, ...), si invalido
 	 * LINEAL
 	 */
-	public ClosedHashTable(int tam, double fcUP, double fcDOWN, int expl) { // Para la segunda clase
-		// Completar lo que falta...
-
+	public ClosedHashTableRedispersion(int tam, double fcUP, double fcDOWN, int expl) { // Para la segunda clase
+		this(tam, expl);
+		this.maxlf = fcUP;
+		this.minlf = fcDOWN;
 	}
 
 	@Override
@@ -80,6 +87,7 @@ public class ClosedHashTable<T> extends AbstractHash<T> {
 			return false;
 		this.tabla[pos].setInfo(elem);
 		this.numElems += 1;
+		reDispersion();
 		return true;
 	}
 
@@ -133,6 +141,7 @@ public class ClosedHashTable<T> extends AbstractHash<T> {
 		}
 		this.tabla[pos].remove();
 		this.numElems -= 1;
+		inverseReDispersion();
 		return true;
 
 	}
@@ -140,12 +149,57 @@ public class ClosedHashTable<T> extends AbstractHash<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected boolean reDispersion() { // Para la segunda clase
+		double fc = calculateFc();
+		if (fc > MAX_LF) {
+			// Crear una nueva tabla y hacer una copia
+			HashNode<T> aux[] = this.tabla;
+			int newSize = nextPrimeNumber(getSize() * 2);
+			this.tabla = (HashNode<T>[]) new HashNode[newSize];
+			this.numElems = 0;
+			this.hashSize = newSize;
+
+			// Inicializamos la nueva tabla
+			for (int i = 0; i < getSize(); i++)
+				this.tabla[i] = new HashNode<>();
+
+			// Si hay un elemento con estado LLENO, lo añadimos a la nueva tabla
+			for (int i = 0; i < aux.length; i++) {
+				if (aux[i].getStatus() == HashNode.LLENO)
+					add(aux[i].getInfo());
+			}
+
+			return true;
+		}
+
 		return false;
+	}
+
+	private double calculateFc() {
+		return (double) getNumOfElems() / getSize();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected boolean inverseReDispersion() { // Para la segunda clase
+		double fc = calculateFc();
+
+		if (fc < MIN_LF) {
+			HashNode<T> aux[] = this.tabla;
+			int newSize = previousPrimeNumber(getSize() / 2);
+			this.tabla = (HashNode<T>[]) new HashNode[newSize];
+			this.numElems = 0;
+			this.hashSize = newSize;
+
+			for (int i = 0; i < getSize(); i++)
+				this.tabla[i] = new HashNode<>();
+
+			for (int i = 0; i < aux.length; i++) {
+				if (aux[i].getStatus() == HashNode.LLENO)
+					add(aux[i].getInfo());
+			}
+
+			return true;
+		}
 		return false;
 	}
 
@@ -167,5 +221,21 @@ public class ClosedHashTable<T> extends AbstractHash<T> {
 		cadena.append(getNumOfElems());
 		cadena.append("]");
 		return cadena.toString();
+	}
+
+	public double getMaxlf() {
+		return maxlf;
+	}
+
+	public void setMaxlf(double maxlf) {
+		this.maxlf = maxlf;
+	}
+
+	public double getMinlf() {
+		return minlf;
+	}
+
+	public void setMinlf(double minlf) {
+		this.minlf = minlf;
 	}
 }

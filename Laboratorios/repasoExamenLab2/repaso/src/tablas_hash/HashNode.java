@@ -1,4 +1,4 @@
-package p4Hash;
+package tablas_hash;
 
 /**
  * @author Profesores ED
@@ -10,34 +10,35 @@ public class HashNode<T> {
 	private T info;
 	private int status;
 
-	
 	public static final int BORRADO = -1;
 	public static final int VACIO = 0;
 	public static final int LLENO = 1;
 
-	public HashNode () {
-		
-	}
-	
-	public T getInfo() {
-		
-	}
-	
-	public void remove (){
-		
-	}
-	
-	public void setInfo(T elem){
-		
-	}
-	
-	public int getStatus() {
-		
+	public HashNode() {
+		this.info = null;
+		this.status = VACIO;
 	}
 
-	public String toString (){
-		StringBuilder cadena=new StringBuilder("{");
-		switch (getStatus()){
+	public T getInfo() {
+		return this.info;
+	}
+
+	public void remove() {
+		this.status = BORRADO;
+	}
+
+	public void setInfo(T elem) {
+		this.info = elem;
+		this.status = LLENO;
+	}
+
+	public int getStatus() {
+		return this.status;
+	}
+
+	public String toString() {
+		StringBuilder cadena = new StringBuilder("{");
+		switch (getStatus()) {
 		case LLENO:
 			cadena.append(info);
 			break;
