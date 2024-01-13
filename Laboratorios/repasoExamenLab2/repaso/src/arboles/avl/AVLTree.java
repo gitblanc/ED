@@ -289,4 +289,38 @@ public class AVLTree<T extends Comparable<T>> {
 		nodo.setRight(singleLeftRotation(nodo.getRight()));
 		return singleRightRotation(nodo);
 	}
+
+	// METODOS EXTRA EXAMEN
+
+	/*
+	 * Método para calcular la altura de un elemento dado
+	 */
+	public int calcularAlturaElemento(T elem) {
+		if (elem == null || searchNode(elem) == null)
+			return -1;
+
+		return searchNode(elem).getHeight();
+	}
+
+	/*
+	 * Un nodo hoja es aquel que no tiene hijos
+	 */
+	public boolean esNodoHoja(T elem) {
+		AVLNode<T> find = searchNode(elem);
+		if (elem == null || find == null)
+			return false;
+
+		return (find.getLeft() == null && find.getRight() == null);
+	}
+
+	/*
+	 * Nodo que tiene al menos un hijo (lo contrario a nodo hoja)
+	 */
+	public boolean esNodoInterior(T elem) {
+		AVLNode<T> find = searchNode(elem);
+		if (elem == null || find == null)
+			return false;
+
+		return (find.getLeft() != null || find.getRight() != null);
+	}
 }
